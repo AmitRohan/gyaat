@@ -40,14 +40,17 @@ function NewUserModal({navigation}) {
             userNameInputRef.current.focus();
             return;
           }
-          UserStore.getItems().then(allUsers => {
-            var id = 1 + (allUsers.pop() || {id: 0}).id;
+
+          var addUserToDB = (allUsers = []) => {
+            console.log(allUsers, typeof allUsers);
+            var id = 1 + (allUsers ? allUsers.pop() : {id: 0}).id;
             UserStore.addItem({id, name: userName, number: userNumber}).finally(
               _ => {
                 navigation.goBack();
               },
             );
-          });
+          };
+          UserStore.getItems().then(addUserToDB).catch(addUserToDB);
         }}>
         Add
       </Button>

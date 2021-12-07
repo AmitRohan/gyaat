@@ -43,14 +43,15 @@ function NewItemModal({navigation}) {
             return;
           }
 
-          ItemStore.getItems().then(allItems => {
-            var id = 1 + (allItems.pop() || {id: 0}).id;
+          var addItemToDB = (allItems = []) => {
+            var id = 1 + (allItems ? allItems.pop() : {id: 0}).id;
             ItemStore.addItem({id, name: itemName, price: itemPrice}).finally(
               _ => {
                 navigation.goBack();
               },
             );
-          });
+          };
+          ItemStore.getItems().then(addItemToDB).catch(addItemToDB);
         }}>
         Add
       </Button>
