@@ -9,10 +9,12 @@
 import React from 'react';
 
 import {NavigationContainer} from '@react-navigation/native';
-import HomeScreen from './screens/HomeScreen';
-import SettingsScreen from './screens/SettingsScreen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Image} from 'react-native';
+import UsersScreen from './screens/UsersScreen';
+import TablesScreen from './screens/TablesScreen';
+import DashboardScreen from './screens/DashboardScreen';
+import ItemsScreen from './screens/ItemsScreen';
 
 const tablesIcon = require('./assets/icons/tables.png');
 const dashboardIcon = require('./assets/icons/dashboard.png');
@@ -31,15 +33,26 @@ const App = () => {
             let iconName;
             let tintColor;
             if (focused) {
-              tintColor = tabBarInactiveTintColor;
-            } else {
               tintColor = tabBarActiveTintColor;
+            } else {
+              tintColor = tabBarInactiveTintColor;
             }
-            if (route.name === 'Home') {
-              iconName = tablesIcon;
-            } else if (route.name === 'Settings') {
-              iconName = dashboardIcon;
+
+            switch (route.name) {
+              case 'Tables':
+                iconName = tablesIcon;
+                break;
+              case 'Items':
+                iconName = itemsIcon;
+                break;
+              case 'Users':
+                iconName = usersIcon;
+                break;
+              case 'Dashboard':
+                iconName = dashboardIcon;
+                break;
             }
+
             return (
               <Image
                 source={iconName}
@@ -56,8 +69,10 @@ const App = () => {
           tabBarActiveTintColor: tabBarActiveTintColor,
           tabBarInactiveTintColor: tabBarInactiveTintColor,
         })}>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen name="Tables" component={TablesScreen} />
+        <Tab.Screen name="Items" component={ItemsScreen} />
+        <Tab.Screen name="Users" component={UsersScreen} />
+        <Tab.Screen name="Dashboard" component={DashboardScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
