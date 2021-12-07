@@ -22,7 +22,9 @@ function TablesScreen({navigation}) {
   const getTablesUI = () => {
     const cardUI = ({item}) => {
       return (
-        <Card style={styles.listItem}>
+        <Card
+          style={styles.listItem}
+          onPress={() => navigation.navigate('Edit Table', {table: item})}>
           <Card.Title title={item.name} />
         </Card>
       );
