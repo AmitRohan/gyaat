@@ -1,13 +1,21 @@
 import * as React from 'react';
-import {View, StyleSheet, TouchableOpacity, Platform} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+  FlatList,
+} from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
-import {Text, TextInput, Button} from 'react-native-paper';
+import {Text, TextInput, Button, Card} from 'react-native-paper';
 import {TableStore} from '../utils/TableStore';
 import {ItemStore} from '../utils/ItemStore';
 
 function EditTableModal({navigation, route}) {
   const [items, setItems] = React.useState([]);
+  const [table, setTable] = React.useState(route.params.table);
   const itemNameInputRef = React.useRef();
+  const itemQuantityInputRef = React.useRef();
   React.useEffect(() => {
     // ON PAGE LOAD
     const unsubscribe = navigation.addListener('focus', () => {
@@ -26,7 +34,34 @@ function EditTableModal({navigation, route}) {
   };
 
   const [itemNameQuery, setItemNameQuery] = React.useState('');
+  const [itemCount, setItemCount] = React.useState(0);
+
   const filteredData = filterItems(itemNameQuery);
+
+  const getOrdersUI = () => {
+    const cardUI = ({item}) => {
+      return (
+        <Card style={styles.listItem}>
+          <Card.Title title={item.name} subtitle={'x' + item.quantity} />
+        </Card>
+      );
+    };
+    return (
+      <FlatList
+        contentContainerStyle={styles.list}
+        data={table.orders}
+        renderItem={cardUI}
+      />
+    );
+  };
+  const getTableData = () => {
+    return (
+      <View>
+        <Text>User : {table.name}</Text>
+        {getOrdersUI()}
+      </View>
+    );
+  };
   return (
     <View style={styles.container}>
       <View style={styles.autocompleteContainer}>
@@ -44,6 +79,11 @@ function EditTableModal({navigation, route}) {
           mode="outlined"
           label="Item Name"
           placeholder="Name"
+          returnKeyType="next"
+          onSubmitEditing={() => {
+            itemQuantityInputRef.current.focus();
+          }}
+          blurOnSubmit={false}
           renderTextInput={props => <TextInput {...props} />}
           flatListProps={{
             keyExtractor: (_, idx) => idx,
@@ -56,8 +96,18 @@ function EditTableModal({navigation, route}) {
         />
       </View>
 
+      <TextInput
+        ref={itemQuantityInputRef}
+        placeholder="0"
+        label="Quantity"
+        mode="outlined"
+        keyboardType="numeric"
+        daata={itemCount}
+        returnKeyType="next"
+        onChangeText={text => setItemCount(text)}
+      />
+
       <View style={styles.restContent}>
-        <Text>{route.params.name}</Text>
         <Button
           mode="contained"
           onPress={() => {
@@ -65,13 +115,49 @@ function EditTableModal({navigation, route}) {
               itemNameInputRef.current.focus();
               return;
             }
-            TableStore.addItem({
+
+            if (itemCount === 0) {
+              itemQuantityInputRef.current.focus();
+              return;
+            }
+            var orders = table.orders;
+            orders.push({
               name: itemNameQuery,
-              active: true,
-              orders: [],
-            }).finally(_ => navigation.goBack());
+              quantity: itemCount,
+            });
+            setTable({orders});
           }}>
           Add
+        </Button>
+        <Button
+          mode="outlined"
+          onPress={() => {
+            setItemNameQuery('');
+            setItemCount(0);
+            // itemNameInputRef.current.focus();
+          }}>
+          Reset
+        </Button>
+        {getTableData()}
+        <Button
+          mode="contained"
+          onPress={() => {
+            if (itemNameQuery.trim().length === 0) {
+              itemNameInputRef.current.focus();
+              return;
+            }
+
+            if (itemCount === 0) {
+              itemQuantityInputRef.current.focus();
+              return;
+            }
+            // TableStore.addOrderToTable({
+            //   name: itemNameQuery,
+            //   active: true,
+            //   orders: [],
+            // }).finally(_ => navigation.goBack());
+          }}>
+          Update
         </Button>
         <Button mode="outlined" onPress={() => navigation.goBack()}>
           Dismiss
