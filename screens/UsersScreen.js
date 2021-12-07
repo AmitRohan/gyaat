@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {Text, View, Button, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet} from 'react-native';
 import {FAB} from 'react-native-paper';
 
 function UsersScreen({navigation}) {
   return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+    <View style={styles.container}>
       <Text>UsersScreen!</Text>
       <FAB
         style={styles.fab}
@@ -20,6 +20,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#eeeeee',
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   list: {
     padding: 12,
