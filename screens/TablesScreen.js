@@ -1,8 +1,24 @@
 import * as React from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {FAB} from 'react-native-paper';
+import {TableStore} from '../utils/TableStore';
 
 function TablesScreen({navigation}) {
+  const [tables, setTables] = React.useState([]);
+
+  React.useEffect(() => {
+    // ON PAGE LOAD
+    const unsubscribe = navigation.addListener('focus', () => {
+      TableStore.getItems()
+        .then((_tables = []) => {
+          setTables(_tables);
+        })
+        .catch(_ => setTables([]));
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
       <Text>TablesScreen!</Text>
