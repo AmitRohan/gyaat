@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
-import {FAB} from 'react-native-paper';
+import {Text, View, StyleSheet, FlatList} from 'react-native';
+import {Card, FAB} from 'react-native-paper';
 import {TableStore} from '../utils/TableStore';
 
 function TablesScreen({navigation}) {
@@ -11,7 +11,7 @@ function TablesScreen({navigation}) {
     const unsubscribe = navigation.addListener('focus', () => {
       TableStore.getItems()
         .then((_tables = []) => {
-          setTables(_tables);
+          setTables(_tables.filter(table => table.active));
         })
         .catch(_ => setTables([]));
     });
@@ -19,9 +19,26 @@ function TablesScreen({navigation}) {
     return unsubscribe;
   }, [navigation]);
 
+  const getTablesUI = () => {
+    const cardUI = ({item}) => {
+      return (
+        <Card style={styles.listItem}>
+          <Card.Title title={item.name} />
+        </Card>
+      );
+    };
+    return (
+      <FlatList
+        contentContainerStyle={styles.list}
+        data={tables}
+        renderItem={cardUI}
+      />
+    );
+  };
+
   return (
     <View style={styles.container}>
-      <Text>TablesScreen!</Text>
+      {getTablesUI()}
       <FAB
         style={styles.fab}
         accessibilityLabel="Add New Tables"
@@ -36,8 +53,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#eeeeee',
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   list: {
     padding: 12,
