@@ -18,6 +18,7 @@ function NewUserModal({navigation}) {
         placeholder="Name"
         label="Name"
         mode="outlined"
+        returnKeyType="next"
         onChangeText={text => setUserName(text)}
         onSubmitEditing={() => {
           userNumberInputRef.current.focus();
@@ -33,7 +34,6 @@ function NewUserModal({navigation}) {
         onChangeText={text => setUserNumber(text)}
       />
       <Button
-        ref={addUserButtonRef}
         mode="contained"
         onPress={() => {
           if (userName.trim().length === 0) {
