@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {Text, View, Button, TextInput} from 'react-native';
+import {ItemStore} from '../utils/ItemStore';
 
 function NewItemModal({navigation}) {
   const itemPriceInputRef = React.useRef();
@@ -30,8 +31,9 @@ function NewItemModal({navigation}) {
       <Button
         ref={addItemButtonRef}
         onPress={() => {
-          console.log('Item Added', itemName, itemPrice);
-          navigation.goBack();
+          ItemStore.addItem({name: itemName, price: itemPrice}).finally(_ => {
+            navigation.goBack();
+          });
         }}
         title="Add"
       />
