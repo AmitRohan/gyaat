@@ -6,6 +6,7 @@ import NewUserModal from './screens/NewUserModal';
 import NewItemModal from './screens/NewItemModal';
 import TablesScreen from './screens/TablesScreen';
 import NewTableModal from './screens/NewTableModal';
+import EditTableModal from './screens/EditTableModal';
 const Stack = createStackNavigator();
 
 const ItemsScreenNavigations = () => (
@@ -26,6 +27,7 @@ const TableScreenNavigations = () => (
   <Stack.Navigator>
     <Stack.Screen name="Table List" component={TablesScreen} />
     <Stack.Screen name="New Table" component={NewTableModal} />
+    <Stack.Screen name="Edit Table" component={EditTableModal} />
   </Stack.Navigator>
 );
 
