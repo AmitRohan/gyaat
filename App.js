@@ -11,10 +11,14 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Image} from 'react-native';
-import UsersScreen from './screens/UsersScreen';
+
 import TablesScreen from './screens/TablesScreen';
 import DashboardScreen from './screens/DashboardScreen';
-import ItemsScreen from './screens/ItemsScreen';
+
+import {
+  ItemsScreenNavigations,
+  UsersScreenNavigations,
+} from './AppSubNavigation';
 
 const tablesIcon = require('./assets/icons/tables.png');
 const dashboardIcon = require('./assets/icons/dashboard.png');
@@ -70,8 +74,8 @@ const App = () => {
           tabBarInactiveTintColor: tabBarInactiveTintColor,
         })}>
         <Tab.Screen name="Tables" component={TablesScreen} />
-        <Tab.Screen name="Items" component={ItemsScreen} />
-        <Tab.Screen name="Users" component={UsersScreen} />
+        <Tab.Screen name="Items" component={ItemsScreenNavigations} />
+        <Tab.Screen name="Users" component={UsersScreenNavigations} />
         <Tab.Screen
           name="Dashboard"
           component={DashboardScreen}
