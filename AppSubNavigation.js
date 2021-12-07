@@ -2,24 +2,31 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import ItemsScreen from './screens/ItemsScreen';
 import UsersScreen from './screens/UsersScreen';
+import NewUserModal from './screens/NewUserModal';
+import NewItemModal from './screens/NewItemModal';
+import TablesScreen from './screens/TablesScreen';
+import NewTableModal from './screens/NewTableModal';
 const Stack = createStackNavigator();
 
-const ItemsScreenNavigations = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="Items" component={ItemsScreen} />
-      <Stack.Screen name="New Item" component={ItemsScreen} />
-    </Stack.Navigator>
-  );
-};
+const ItemsScreenNavigations = () => (
+  <Stack.Navigator>
+    <Stack.Screen name="Item List" component={ItemsScreen} />
+    <Stack.Screen name="New Item" component={NewItemModal} />
+  </Stack.Navigator>
+);
 
-const UsersScreenNavigations = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="Users" component={UsersScreen} />
-      <Stack.Screen name="New User" component={UsersScreen} />
-    </Stack.Navigator>
-  );
-};
+const UsersScreenNavigations = () => (
+  <Stack.Navigator>
+    <Stack.Screen name="User List" component={UsersScreen} />
+    <Stack.Screen name="New User" component={NewUserModal} />
+  </Stack.Navigator>
+);
 
-export {ItemsScreenNavigations, UsersScreenNavigations};
+const TableScreenNavigations = () => (
+  <Stack.Navigator>
+    <Stack.Screen name="Table List" component={TablesScreen} />
+    <Stack.Screen name="New Table" component={NewTableModal} />
+  </Stack.Navigator>
+);
+
+export {ItemsScreenNavigations, UsersScreenNavigations, TableScreenNavigations};
