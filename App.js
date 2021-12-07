@@ -11,12 +11,11 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Image} from 'react-native';
-
-import TablesScreen from './screens/TablesScreen';
 import DashboardScreen from './screens/DashboardScreen';
 
 import {
   ItemsScreenNavigations,
+  TableScreenNavigations,
   UsersScreenNavigations,
 } from './AppSubNavigation';
 
@@ -73,7 +72,7 @@ const App = () => {
           tabBarActiveTintColor: tabBarActiveTintColor,
           tabBarInactiveTintColor: tabBarInactiveTintColor,
         })}>
-        <Tab.Screen name="Tables" component={TablesScreen} />
+        <Tab.Screen name="Tables" component={TableScreenNavigations} />
         <Tab.Screen name="Items" component={ItemsScreenNavigations} />
         <Tab.Screen name="Users" component={UsersScreenNavigations} />
         <Tab.Screen
