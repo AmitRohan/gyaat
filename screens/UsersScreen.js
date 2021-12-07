@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {Text, View, StyleSheet} from 'react-native';
-import {FAB} from 'react-native-paper';
+import {View, StyleSheet, FlatList} from 'react-native';
+import {Card, FAB} from 'react-native-paper';
 import {UserStore} from '../utils/UserStore';
 
 function UsersScreen({navigation}) {
@@ -10,8 +10,8 @@ function UsersScreen({navigation}) {
     // ON PAGE LOAD
     const unsubscribe = navigation.addListener('focus', () => {
       UserStore.getItems()
-        .then((_items = []) => {
-          setUsers(_items);
+        .then((_users = []) => {
+          setUsers(_users);
         })
         .catch(_ => setUsers([]));
     });
@@ -19,9 +19,26 @@ function UsersScreen({navigation}) {
     return unsubscribe;
   }, [navigation]);
 
+  const getUsers = () => {
+    const cardUI = ({item}) => {
+      return (
+        <Card style={styles.listItem}>
+          <Card.Title title={item.name} />
+        </Card>
+      );
+    };
+    return (
+      <FlatList
+        contentContainerStyle={styles.list}
+        data={users}
+        renderItem={cardUI}
+      />
+    );
+  };
+
   return (
     <View style={styles.container}>
-      <Text>UsersScreen!</Text>
+      {getUsers()}
       <FAB
         style={styles.fab}
         accessibilityLabel="Add New User"
@@ -36,8 +53,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#eeeeee',
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   list: {
     padding: 12,
