@@ -1,8 +1,24 @@
 import * as React from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {FAB} from 'react-native-paper';
+import {UserStore} from '../utils/UserStore';
 
 function UsersScreen({navigation}) {
+  const [users, setUsers] = React.useState([]);
+
+  React.useEffect(() => {
+    // ON PAGE LOAD
+    const unsubscribe = navigation.addListener('focus', () => {
+      UserStore.getItems()
+        .then((_items = []) => {
+          setUsers(_items);
+        })
+        .catch(_ => setUsers([]));
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
       <Text>UsersScreen!</Text>
