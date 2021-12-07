@@ -5,6 +5,19 @@ import {ItemStore} from '../utils/ItemStore';
 function ItemsScreen({navigation}) {
   const [items, setItems] = React.useState([]);
 
+  React.useEffect(() => {
+    // ON PAGE LOAD
+    const unsubscribe = navigation.addListener('focus', () => {
+      ItemStore.getItems()
+        .then((_items = []) => {
+          setItems(_items);
+        })
+        .catch(_ => setItems([]));
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   const getAllItems = () => {
     return items.map((item, pos) => <Text key={pos}>{item.name}</Text>);
   };
