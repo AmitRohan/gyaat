@@ -68,7 +68,7 @@ function NewTableModal({navigation}) {
             TableStore.addItem({
               name: userNameQuery,
               active: true,
-              items: [],
+              orders: [],
             }).finally(_ => navigation.goBack());
           }}>
           Add
