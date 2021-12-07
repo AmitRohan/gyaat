@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {Text, View, Button, StyleSheet, FlatList} from 'react-native';
+import {Card} from 'react-native-paper';
 import {ItemStore} from '../utils/ItemStore';
 
 function ItemsScreen({navigation}) {
@@ -19,13 +20,18 @@ function ItemsScreen({navigation}) {
   }, [navigation]);
 
   const getAllItems = () => {
+    const cardUI = ({item}) => {
+      return (
+        <Card style={styles.listItem}>
+          <Card.Title title={item.name} subtitle={'Price :' + item.price} />
+        </Card>
+      );
+    };
     return (
       <FlatList
+        contentContainerStyle={styles.list}
         data={items}
-        renderItem={({item}) => {
-          console.log(item);
-          return <Text style={styles.listItem}>{item.name}</Text>;
-        }}
+        renderItem={cardUI}
       />
     );
   };
@@ -43,13 +49,17 @@ function ItemsScreen({navigation}) {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#eeeeee',
     flex: 1,
-    paddingTop: 22,
+    paddingTop: 12,
+  },
+  list: {
+    padding: 12,
+    paddingBottom: 50,
+    marginTop: 12,
   },
   listItem: {
-    padding: 10,
-    fontSize: 18,
-    height: 44,
+    marginBottom: 6,
   },
 });
 
