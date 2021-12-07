@@ -72,7 +72,11 @@ const App = () => {
         <Tab.Screen name="Tables" component={TablesScreen} />
         <Tab.Screen name="Items" component={ItemsScreen} />
         <Tab.Screen name="Users" component={UsersScreen} />
-        <Tab.Screen name="Dashboard" component={DashboardScreen} />
+        <Tab.Screen
+          name="Dashboard"
+          component={DashboardScreen}
+          // options={{tabBarBadge: 3}}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
