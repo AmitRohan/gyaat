@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {Text, View} from 'react-native';
 
-function SettingsScreen() {
+function DashboardScreen() {
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Settings!</Text>
+      <Text>DashboardScreen!</Text>
     </View>
   );
 }
 
-export default SettingsScreen;
+export default DashboardScreen;
