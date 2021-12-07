@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Text, View, Button, StyleSheet, FlatList} from 'react-native';
-import {Card} from 'react-native-paper';
+import {Card, FAB} from 'react-native-paper';
 import {ItemStore} from '../utils/ItemStore';
 
 function ItemsScreen({navigation}) {
@@ -38,11 +38,13 @@ function ItemsScreen({navigation}) {
 
   return (
     <View style={styles.container}>
-      <Button
-        onPress={() => navigation.navigate('New Item', {msg: 'HI'})}
-        title="Add Item"
-      />
       {getAllItems()}
+      <FAB
+        style={styles.fab}
+        accessibilityLabel="Add New Items"
+        icon={require('../assets/icons/items.png')}
+        onPress={() => navigation.navigate('New Item', {msg: 'HI'})}
+      />
     </View>
   );
 }
@@ -51,15 +53,20 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#eeeeee',
     flex: 1,
-    paddingTop: 12,
   },
   list: {
     padding: 12,
     paddingBottom: 50,
-    marginTop: 12,
+    marginTop: 6,
   },
   listItem: {
     marginBottom: 6,
+  },
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
   },
 });
 
