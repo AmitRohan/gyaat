@@ -33,16 +33,20 @@ function EditTableModal({navigation, route}) {
     return items.filter(item => item.name.indexOf(nameToSearch) !== -1);
   };
 
-  const [itemNameQuery, setItemNameQuery] = React.useState('');
+  const [itemNameQuery, setItemNameQuery] = React.useState({name: ''});
   const [itemCount, setItemCount] = React.useState(0);
 
   const filteredData = filterItems(itemNameQuery);
 
   const getOrdersUI = () => {
     const cardUI = ({item}) => {
+      const amt = item.item.price * item.quantity;
       return (
         <Card style={styles.listItem}>
-          <Card.Title title={item.name} subtitle={'x' + item.quantity} />
+          <Card.Title
+            title={item.item.name}
+            subtitle={item.item.price + 'x' + item.quantity + '=' + amt}
+          />
         </Card>
       );
     };
@@ -70,11 +74,12 @@ function EditTableModal({navigation, route}) {
           autoCorrect={false}
           autoFocus={true}
           data={
-            filteredData?.length === 1 && filteredData[0].name === itemNameQuery
+            filteredData?.length === 1 &&
+            filteredData[0].name === itemNameQuery.name
               ? []
               : filteredData
           }
-          value={itemNameQuery}
+          value={itemNameQuery.name}
           onChangeText={setItemNameQuery}
           mode="outlined"
           label="Item Name"
@@ -87,9 +92,9 @@ function EditTableModal({navigation, route}) {
           renderTextInput={props => <TextInput {...props} />}
           flatListProps={{
             keyExtractor: (_, idx) => idx,
-            renderItem: ({item: {name}}) => (
-              <TouchableOpacity onPress={() => setItemNameQuery(name)}>
-                <Text style={styles.itemText}>{name}</Text>
+            renderItem: ({item}) => (
+              <TouchableOpacity onPress={() => setItemNameQuery(item)}>
+                <Text style={styles.itemText}>{item.name}</Text>
               </TouchableOpacity>
             ),
           }}
@@ -111,7 +116,7 @@ function EditTableModal({navigation, route}) {
         <Button
           mode="contained"
           onPress={() => {
-            if (itemNameQuery.trim().length === 0) {
+            if (itemNameQuery.name.trim().length === 0) {
               itemNameInputRef.current.focus();
               return;
             }
@@ -122,7 +127,7 @@ function EditTableModal({navigation, route}) {
             }
             var orders = table.orders;
             orders.push({
-              name: itemNameQuery,
+              item: itemNameQuery,
               quantity: itemCount,
             });
             setTable({orders});
@@ -132,7 +137,7 @@ function EditTableModal({navigation, route}) {
         <Button
           mode="outlined"
           onPress={() => {
-            setItemNameQuery('');
+            setItemNameQuery({name: ''});
             setItemCount(0);
             // itemNameInputRef.current.focus();
           }}>
@@ -142,7 +147,7 @@ function EditTableModal({navigation, route}) {
         <Button
           mode="contained"
           onPress={() => {
-            if (itemNameQuery.trim().length === 0) {
+            if (itemNameQuery.name.trim().length === 0) {
               itemNameInputRef.current.focus();
               return;
             }
