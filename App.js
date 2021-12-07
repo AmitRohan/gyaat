@@ -32,6 +32,7 @@ const App = () => {
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={({route}) => ({
+          headerShown: route.name === 'Dashboard', // SHOW ONLY FOR DASHBOARD
           tabBarIcon: ({focused, color, size}) => {
             let iconName;
             let tintColor;
