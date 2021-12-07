@@ -65,11 +65,15 @@ function NewTableModal({navigation}) {
               userNameInputRef.current.focus();
               return;
             }
-            TableStore.addItem({
-              name: userNameQuery,
-              active: true,
-              orders: [],
-            }).finally(_ => navigation.goBack());
+            TableStore.getItems().then(allTables => {
+              var id = 1 + (allTables.pop() || {id: 0}).id;
+              TableStore.addItem({
+                id,
+                name: userNameQuery,
+                active: true,
+                orders: [],
+              }).finally(_ => navigation.goBack());
+            });
           }}>
           Add
         </Button>

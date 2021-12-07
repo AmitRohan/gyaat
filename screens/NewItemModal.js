@@ -42,8 +42,14 @@ function NewItemModal({navigation}) {
             itemPriceInputRef.current.focus();
             return;
           }
-          ItemStore.addItem({name: itemName, price: itemPrice}).finally(_ => {
-            navigation.goBack();
+
+          ItemStore.getItems().then(allItems => {
+            var id = 1 + (allItems.pop() || {id: 0}).id;
+            ItemStore.addItem({id, name: itemName, price: itemPrice}).finally(
+              _ => {
+                navigation.goBack();
+              },
+            );
           });
         }}>
         Add

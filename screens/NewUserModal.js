@@ -40,8 +40,13 @@ function NewUserModal({navigation}) {
             userNameInputRef.current.focus();
             return;
           }
-          UserStore.addItem({name: userName, number: userNumber}).finally(_ => {
-            navigation.goBack();
+          UserStore.getItems().then(allUsers => {
+            var id = 1 + (allUsers.pop() || {id: 0}).id;
+            UserStore.addItem({id, name: userName, number: userNumber}).finally(
+              _ => {
+                navigation.goBack();
+              },
+            );
           });
         }}>
         Add
