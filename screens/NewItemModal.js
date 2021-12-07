@@ -1,20 +1,22 @@
 import * as React from 'react';
-import {Text, View, Button, TextInput} from 'react-native';
+import {View} from 'react-native';
+import {Button, TextInput} from 'react-native-paper';
 import {ItemStore} from '../utils/ItemStore';
 
 function NewItemModal({navigation}) {
   const itemPriceInputRef = React.useRef();
-  const addItemButtonRef = React.useRef();
+  const itemNameInputRef = React.useRef();
   const [itemName, setItemName] = React.useState('');
   const [itemPrice, setItemPrice] = React.useState(0);
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text style={{fontSize: 30}}>NewItemsModal!</Text>
+    <View>
       <TextInput
+        ref={itemNameInputRef}
         autoFocus={true}
-        style={{height: 40}}
-        onKe
+        returnKeyType="next"
         placeholder="Name"
+        label="Name"
+        mode="outlined"
         onChangeText={text => setItemName(text)}
         onSubmitEditing={() => {
           itemPriceInputRef.current.focus();
@@ -23,21 +25,32 @@ function NewItemModal({navigation}) {
       />
       <TextInput
         ref={itemPriceInputRef}
-        style={{height: 40}}
         keyboardType="numeric"
-        placeholder="Price"
+        mode="outlined"
+        label="Price"
+        placeholder="10"
         onChangeText={text => setItemPrice(text)}
       />
       <Button
-        ref={addItemButtonRef}
+        mode="contained"
         onPress={() => {
+          if (itemName.trim().length === 0) {
+            itemNameInputRef.current.focus();
+            return;
+          }
+          if (itemPrice === 0) {
+            itemPriceInputRef.current.focus();
+            return;
+          }
           ItemStore.addItem({name: itemName, price: itemPrice}).finally(_ => {
             navigation.goBack();
           });
-        }}
-        title="Add"
-      />
-      <Button onPress={() => navigation.goBack()} title="Dismiss" />
+        }}>
+        Add
+      </Button>
+      <Button mode="outlined" onPress={() => navigation.goBack()}>
+        Dismiss
+      </Button>
     </View>
   );
 }
