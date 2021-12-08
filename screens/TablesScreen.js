@@ -24,7 +24,7 @@ function TablesScreen({navigation}) {
       var tableBill = item.orders.reduce(
         (pv, cv) => {
           var nv = Object.assign({}, pv);
-          nv.q += cv.quantity;
+          nv.q += parseInt(cv.quantity);
           nv.p += cv.quantity * cv.item.price;
           return nv;
         },
@@ -37,7 +37,7 @@ function TablesScreen({navigation}) {
           onPress={() => navigation.navigate('Edit Table', {table: item})}>
           <Card.Title title={item.name} subtitle={tableBill.q + ' Items'} />
           <Card.Content>
-            <Paragraph>{tableBill.p + ' Rs'}</Paragraph>
+            <Paragraph>{'Rs ' + tableBill.p}</Paragraph>
           </Card.Content>
         </Card>
       );
