@@ -12,7 +12,7 @@ import {TableStore} from '../utils/TableStore';
 import {ItemStore} from '../utils/ItemStore';
 import merge from 'deepmerge';
 
-function EditTableModal({navigation, route}) {
+function TableDetailsScreen({navigation, route}) {
   const [snackBarMsg, setSnackBarMsg] = React.useState('');
   const [showSnackBar, setShowSnackBar] = React.useState(false);
 
@@ -230,4 +230,4 @@ const styles = StyleSheet.create({
     margin: 2,
   },
 });
-export default EditTableModal;
+export default TableDetailsScreen;

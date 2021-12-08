@@ -34,7 +34,7 @@ function TablesScreen({navigation}) {
       return (
         <Card
           style={styles.listItem}
-          onPress={() => navigation.navigate('Edit Table', {table: item})}>
+          onPress={() => navigation.navigate('Table Details', {table: item})}>
           <Card.Title title={item.name} subtitle={tableBill.q + ' Items'} />
           <Card.Content>
             <Paragraph>{'Rs ' + tableBill.p}</Paragraph>
