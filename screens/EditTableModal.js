@@ -58,17 +58,25 @@ function EditTableModal({navigation, route}) {
     newTable.orders = orders;
     setTable(newTable);
   };
-  const addOrderToTableInDB = () => {
+
+  const updateTableInDBFromState = (tableToSet = table) => {
     const updateDataInTable = (allTables = []) => {
       var newTables = (allTables || []).map(_table => {
-        if (_table.id === table.id) {
-          return merge(_table, table);
+        if (_table.id === tableToSet.id) {
+          return merge(_table, tableToSet);
         }
         return _table;
       });
       TableStore.updateItem(newTables).finally(_ => navigation.goBack());
     };
     TableStore.getItems().then(updateDataInTable).catch(updateDataInTable);
+  };
+
+  const closeTableInDB = () => {
+    var newTable = Object.assign({}, table);
+    newTable.active = false;
+    setTable(newTable);
+    updateTableInDBFromState(newTable);
   };
 
   const getOrdersUI = () => {
@@ -166,9 +174,16 @@ function EditTableModal({navigation, route}) {
         <Button
           mode="contained"
           onPress={() => {
-            addOrderToTableInDB();
+            updateTableInDBFromState();
           }}>
           Update
+        </Button>
+        <Button
+          mode="contained"
+          onPress={() => {
+            closeTableInDB();
+          }}>
+          Close Table
         </Button>
         <Button mode="outlined" onPress={() => navigation.goBack()}>
           Dismiss
