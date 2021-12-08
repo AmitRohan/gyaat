@@ -10,6 +10,7 @@ import Autocomplete from 'react-native-autocomplete-input';
 import {Text, TextInput, Button, Card} from 'react-native-paper';
 import {TableStore} from '../utils/TableStore';
 import {ItemStore} from '../utils/ItemStore';
+import merge from 'deepmerge';
 
 function EditTableModal({navigation, route}) {
   const [items, setItems] = React.useState([]);
@@ -37,6 +38,38 @@ function EditTableModal({navigation, route}) {
   const [itemCount, setItemCount] = React.useState(0);
 
   const filteredData = filterItems(itemNameQuery);
+
+  const addOrderToTableInState = () => {
+    if (itemNameQuery.name.trim().length === 0) {
+      itemNameInputRef.current.focus();
+      return;
+    }
+
+    if (itemCount === 0) {
+      itemQuantityInputRef.current.focus();
+      return;
+    }
+    var orders = table.orders;
+    orders.push({
+      item: itemNameQuery,
+      quantity: itemCount,
+    });
+    var newTable = Object.assign({}, table);
+    newTable.orders = orders;
+    setTable(newTable);
+  };
+  const addOrderToTableInDB = () => {
+    const updateDataInTable = (allTables = []) => {
+      var newTables = (allTables || []).map(_table => {
+        if (_table.id === table.id) {
+          return merge(_table, table);
+        }
+        return _table;
+      });
+      TableStore.updateItem(newTables).finally(_ => navigation.goBack());
+    };
+    TableStore.getItems().then(updateDataInTable).catch(updateDataInTable);
+  };
 
   const getOrdersUI = () => {
     const cardUI = ({item}) => {
@@ -116,21 +149,7 @@ function EditTableModal({navigation, route}) {
         <Button
           mode="contained"
           onPress={() => {
-            if (itemNameQuery.name.trim().length === 0) {
-              itemNameInputRef.current.focus();
-              return;
-            }
-
-            if (itemCount === 0) {
-              itemQuantityInputRef.current.focus();
-              return;
-            }
-            var orders = table.orders;
-            orders.push({
-              item: itemNameQuery,
-              quantity: itemCount,
-            });
-            setTable({orders});
+            addOrderToTableInState();
           }}>
           Add
         </Button>
@@ -147,20 +166,7 @@ function EditTableModal({navigation, route}) {
         <Button
           mode="contained"
           onPress={() => {
-            if (itemNameQuery.name.trim().length === 0) {
-              itemNameInputRef.current.focus();
-              return;
-            }
-
-            if (itemCount === 0) {
-              itemQuantityInputRef.current.focus();
-              return;
-            }
-            // TableStore.addOrderToTable({
-            //   name: itemNameQuery,
-            //   active: true,
-            //   orders: [],
-            // }).finally(_ => navigation.goBack());
+            addOrderToTableInDB();
           }}>
           Update
         </Button>
