@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Text, View, StyleSheet, FlatList} from 'react-native';
-import {Card, FAB} from 'react-native-paper';
+import {Card, FAB, Paragraph} from 'react-native-paper';
 import {TableStore} from '../utils/TableStore';
 
 function TablesScreen({navigation}) {
@@ -21,11 +21,24 @@ function TablesScreen({navigation}) {
 
   const getTablesUI = () => {
     const cardUI = ({item}) => {
+      var tableBill = item.orders.reduce(
+        (pv, cv) => {
+          var nv = Object.assign({}, pv);
+          nv.q += cv.quantity;
+          nv.p += cv.quantity * cv.item.price;
+          return nv;
+        },
+        {q: 0, p: 0},
+      );
+
       return (
         <Card
           style={styles.listItem}
           onPress={() => navigation.navigate('Edit Table', {table: item})}>
-          <Card.Title title={item.name} />
+          <Card.Title title={item.name} subtitle={tableBill.q + ' Items'} />
+          <Card.Content>
+            <Paragraph>{tableBill.p + ' Rs'}</Paragraph>
+          </Card.Content>
         </Card>
       );
     };
