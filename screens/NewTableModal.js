@@ -1,13 +1,12 @@
 import * as React from 'react';
 import {View, StyleSheet, TouchableOpacity, Platform} from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
-import {Text, TextInput, Button} from 'react-native-paper';
+import {Text, TextInput, Button, Snackbar} from 'react-native-paper';
 import {TableStore} from '../utils/TableStore';
 import {UserStore} from '../utils/UserStore';
 
 function NewTableModal({navigation}) {
   const [users, setUsers] = React.useState([]);
-  const userNameInputRef = React.useRef();
 
   React.useEffect(() => {
     // ON PAGE LOAD
@@ -28,11 +27,20 @@ function NewTableModal({navigation}) {
 
   const [userNameQuery, serUserNameQuery] = React.useState('');
   const filteredData = filterUserName(userNameQuery);
+
+  const [snackBarMsg, setSnackBarMsg] = React.useState('');
+  const [showSnackBar, setShowSnackBar] = React.useState(false);
+
+  const toggleSnackBar = msg => {
+    setSnackBarMsg(msg);
+    setShowSnackBar(true);
+    setTimeout(() => setShowSnackBar(false), 1500);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.autocompleteContainer}>
         <Autocomplete
-          ref={userNameInputRef}
           autoCorrect={false}
           autoFocus={true}
           data={
@@ -62,7 +70,7 @@ function NewTableModal({navigation}) {
           mode="contained"
           onPress={() => {
             if (userNameQuery.trim().length === 0) {
-              userNameInputRef.current.focus();
+              toggleSnackBar('Need name');
               return;
             }
 
@@ -83,6 +91,7 @@ function NewTableModal({navigation}) {
           Dismiss
         </Button>
       </View>
+      <Snackbar visible={showSnackBar}>{snackBarMsg}</Snackbar>
     </View>
   );
 }

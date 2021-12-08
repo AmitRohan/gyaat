@@ -7,12 +7,21 @@ import {
   FlatList,
 } from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
-import {Text, TextInput, Button, Card} from 'react-native-paper';
+import {Text, TextInput, Button, Card, Snackbar} from 'react-native-paper';
 import {TableStore} from '../utils/TableStore';
 import {ItemStore} from '../utils/ItemStore';
 import merge from 'deepmerge';
 
 function EditTableModal({navigation, route}) {
+  const [snackBarMsg, setSnackBarMsg] = React.useState('');
+  const [showSnackBar, setShowSnackBar] = React.useState(false);
+
+  const toggleSnackBar = msg => {
+    setSnackBarMsg(msg);
+    setShowSnackBar(true);
+    setTimeout(() => setShowSnackBar(false), 1500);
+  };
+
   const [items, setItems] = React.useState([]);
   const [table, setTable] = React.useState(route.params.table);
   const itemNameInputRef = React.useRef();
@@ -41,14 +50,17 @@ function EditTableModal({navigation, route}) {
 
   const addOrderToTableInState = () => {
     if (itemNameQuery.name.trim().length === 0) {
+      toggleSnackBar('Need name');
       itemNameInputRef.current.focus();
       return;
     }
 
-    if (itemCount === 0) {
+    if (itemCount.trim().length === 0 || itemCount === 0) {
+      toggleSnackBar('Need quantity > 0');
       itemQuantityInputRef.current.focus();
       return;
     }
+
     var orders = table.orders;
     orders.push({
       item: itemNameQuery,
@@ -189,6 +201,7 @@ function EditTableModal({navigation, route}) {
           Dismiss
         </Button>
       </View>
+      <Snackbar visible={showSnackBar}>{snackBarMsg}</Snackbar>
     </View>
   );
 }

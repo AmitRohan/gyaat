@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {View} from 'react-native';
-import {TextInput, Button} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
+import {TextInput, Button, Snackbar} from 'react-native-paper';
 import {UserStore} from '../utils/UserStore';
 
 function NewUserModal({navigation}) {
@@ -10,8 +10,17 @@ function NewUserModal({navigation}) {
   const [userName, setUserName] = React.useState('');
   const [userNumber, setUserNumber] = React.useState(0);
 
+  const [snackBarMsg, setSnackBarMsg] = React.useState('');
+  const [showSnackBar, setShowSnackBar] = React.useState(false);
+
+  const toggleSnackBar = msg => {
+    setSnackBarMsg(msg);
+    setShowSnackBar(true);
+    setTimeout(() => setShowSnackBar(false), 1500);
+  };
+
   return (
-    <View>
+    <View style={styles.container}>
       <TextInput
         ref={userNameInputRef}
         autoFocus={true}
@@ -37,6 +46,7 @@ function NewUserModal({navigation}) {
         mode="contained"
         onPress={() => {
           if (userName.trim().length === 0) {
+            toggleSnackBar('Need name');
             userNameInputRef.current.focus();
             return;
           }
@@ -57,8 +67,13 @@ function NewUserModal({navigation}) {
       <Button mode="outlined" onPress={() => navigation.goBack()}>
         Dismiss
       </Button>
+      <Snackbar visible={showSnackBar}>{snackBarMsg}</Snackbar>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {height: '100%'},
+});
 
 export default NewUserModal;

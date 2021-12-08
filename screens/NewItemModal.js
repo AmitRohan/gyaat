@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {View} from 'react-native';
-import {Button, TextInput} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
+import {Button, Snackbar, TextInput} from 'react-native-paper';
 import {ItemStore} from '../utils/ItemStore';
 
 function NewItemModal({navigation}) {
@@ -8,8 +8,17 @@ function NewItemModal({navigation}) {
   const itemNameInputRef = React.useRef();
   const [itemName, setItemName] = React.useState('');
   const [itemPrice, setItemPrice] = React.useState(0);
+  const [snackBarMsg, setSnackBarMsg] = React.useState('');
+  const [showSnackBar, setShowSnackBar] = React.useState(false);
+
+  const toggleSnackBar = msg => {
+    setSnackBarMsg(msg);
+    setShowSnackBar(true);
+    setTimeout(() => setShowSnackBar(false), 1500);
+  };
+
   return (
-    <View>
+    <View style={styles.container}>
       <TextInput
         ref={itemNameInputRef}
         autoFocus={true}
@@ -35,10 +44,12 @@ function NewItemModal({navigation}) {
         mode="contained"
         onPress={() => {
           if (itemName.trim().length === 0) {
+            toggleSnackBar('Need name');
             itemNameInputRef.current.focus();
             return;
           }
-          if (itemPrice === 0) {
+          if (itemName.trim().length === 0 || itemPrice === 0) {
+            toggleSnackBar('Need price > 0');
             itemPriceInputRef.current.focus();
             return;
           }
@@ -58,8 +69,14 @@ function NewItemModal({navigation}) {
       <Button mode="outlined" onPress={() => navigation.goBack()}>
         Dismiss
       </Button>
+
+      <Snackbar visible={showSnackBar}>{snackBarMsg}</Snackbar>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {height: '100%'},
+});
 
 export default NewItemModal;
