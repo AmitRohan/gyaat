@@ -16,6 +16,9 @@ const TableStore = {
   getItems: async _ => {
     return StorageManager.getObject(TableStoreKey);
   },
+  updateItem: async table => {
+    return StorageManager.storeObject(TableStoreKey, table);
+  },
   clearItems: async _ => {
     return StorageManager.storeObject(TableStoreKey, []);
   },
