@@ -59,6 +59,7 @@ function TableDetailsScreen({navigation, route}) {
     orders.push({
       item: itemNameQuery,
       quantity: itemCount,
+      createdAt: new Date().getTime(),
     });
     var newTable = Object.assign({}, table);
     newTable.orders = orders;
