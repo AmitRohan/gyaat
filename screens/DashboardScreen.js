@@ -94,6 +94,7 @@ function DashboardScreen({navigation}) {
           accessor={'quantity'}
           backgroundColor={'transparent'}
           paddingLeft={'15'}
+          hasLegend={false}
           absolute
         />
       </View>
