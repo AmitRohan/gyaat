@@ -82,39 +82,62 @@ function DashboardScreen({navigation}) {
       {money: 0, quantity: 0},
     );
     return (
-      <View>
+      <View style={styles.pieChartSectionContainer}>
+        <View style={styles.titleContainer}>
+          <Text>Item Distribution</Text>
+        </View>
+        <View style={styles.bodyContainer}>
+          <View style={styles.chartContainer}>
+            <PieChart
+              data={dataSet}
+              width={windowWidth}
+              height={220}
+              chartConfig={chartConfig}
+              accessor={'quantity'}
+              backgroundColor={'transparent'}
+              paddingLeft={'15'}
+              hasLegend={false}
+              absolute
+            />
+          </View>
+          <View style={styles.legendContainer}>
+            <Text>L1</Text>
+          </View>
+        </View>
+        <View style={styles.descriptionContainer}>
         <Text>{overAllQuantity.quantity} items sold till date</Text>
-        <Text>{overAllQuantity.money} earned till date</Text>
-        <Text>Item Distribution</Text>
-        <PieChart
-          data={dataSet}
-          width={windowWidth}
-          height={220}
-          chartConfig={chartConfig}
-          accessor={'quantity'}
-          backgroundColor={'transparent'}
-          paddingLeft={'15'}
-          hasLegend={false}
-          absolute
-        />
+          <Text>{overAllQuantity.money} earned till date</Text>
+        </View>
       </View>
     );
   };
 
-  return (
-    <View style={styles.container}>
-      <Text>DashboardScreen!</Text>
-      {getItemDistributionUI()}
-    </View>
-  );
+  return <View>{getItemDistributionUI()}</View>;
 }
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#eeeeee',
     flex: 1,
-    justifyContent: 'center',
+  },
+  pieChartSectionContainer: {
+    marginTop: 10,
+  },
+  titleContainer: {
     alignItems: 'center',
+  },
+  bodyContainer: {
+    flexDirection: 'row',
+  },
+  descriptionContainer: {
+    padding: 10,
+  },
+  chartContainer: {
+    flex: 1,
+  },
+  legendContainer: {
+    flex: 1,
+    marginTop: 20,
   },
 });
 
