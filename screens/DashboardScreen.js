@@ -1,12 +1,19 @@
 import * as React from 'react';
-import {Dimensions, StyleSheet, View} from 'react-native';
+import {Dimensions, Platform, StyleSheet, View} from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import {PieChart} from 'react-native-chart-kit';
-import {Text} from 'react-native-paper';
+import {Button, Text} from 'react-native-paper';
 import {TableStore} from '../utils/TableStore';
 import {paletteAll} from '../utils/ColorPallete';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
+const today = new Date();
+const yesterday = new Date(today.getTime());
+
+yesterday.setDate(today.getDate() - 1);
+today.setDate(yesterday.getDate() + 2);
 
 function DashboardScreen({navigation}) {
   const [tables, setTables] = React.useState([]);
@@ -23,6 +30,31 @@ function DashboardScreen({navigation}) {
 
     return unsubscribe;
   }, [navigation]);
+
+  const [startDate, setStartDate] = React.useState(yesterday);
+  const [endDate, setEndDate] = React.useState(today);
+  const [showStartDate, setShowStartDate] = React.useState(false);
+  const [showEndDate, setShowEndDate] = React.useState(false);
+
+  const onStartDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || startDate;
+    setShowStartDate(Platform.OS === 'ios');
+    setStartDate(currentDate);
+  };
+
+  const onEndDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || endDate;
+    setShowEndDate(Platform.OS === 'ios');
+    setEndDate(currentDate);
+  };
+
+  const openStartDatepicker = () => {
+    setShowStartDate(true);
+  };
+
+  const openEndDatepicker = () => {
+    setShowEndDate(true);
+  };
 
   const chartConfig = {
     backgroundGradientFrom: '#1E2923',
@@ -97,6 +129,40 @@ function DashboardScreen({navigation}) {
 
     return (
       <View style={styles.pieChartSectionContainer}>
+        <View>
+          <View>
+            <Button onPress={openStartDatepicker}>
+              Start date : {startDate.toDateString()}
+            </Button>
+          </View>
+          {showStartDate && (
+            <DateTimePicker
+              testID="startDatePicker"
+              value={startDate}
+              maximumDate={today}
+              mode={'date'}
+              is24Hour={true}
+              display="default"
+              onChange={onStartDateChange}
+            />
+          )}
+          <View>
+            <Button onPress={openEndDatepicker}>
+              End date : {endDate.toDateString()}
+            </Button>
+          </View>
+          {showEndDate && (
+            <DateTimePicker
+              testID="endDatePicker"
+              value={endDate}
+              maximumDate={today}
+              mode={'date'}
+              is24Hour={true}
+              display="default"
+              onChange={onEndDateChange}
+            />
+          )}
+        </View>
         <View style={styles.titleContainer}>
           <Text>Item Distribution</Text>
         </View>
