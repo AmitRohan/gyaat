@@ -1,11 +1,5 @@
 import * as React from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Platform,
-  FlatList,
-} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
 import {Text, TextInput, Button, Card, Snackbar} from 'react-native-paper';
 import {TableStore} from '../utils/TableStore';
@@ -121,49 +115,67 @@ function TableDetailsScreen({navigation, route}) {
   };
   return (
     <View style={styles.container}>
-      <View style={styles.autocompleteContainer}>
-        <Autocomplete
-          ref={itemNameInputRef}
-          autoCorrect={false}
-          autoFocus={true}
-          data={
-            filteredData?.length === 1 &&
-            filteredData[0].name === itemNameQuery.name
-              ? []
-              : filteredData
-          }
-          value={itemNameQuery.name}
-          onChangeText={setItemNameQuery}
+      <Button
+        mode="contained"
+        onPress={() => {
+          updateTableInDBFromState();
+        }}>
+        Update
+      </Button>
+      <Button
+        mode="contained"
+        onPress={() => {
+          closeTableInDB();
+        }}>
+        Close Table
+      </Button>
+      <Button mode="outlined" onPress={() => navigation.goBack()}>
+        Dismiss
+      </Button>
+      <View style={styles.autocompleteHolder}>
+        <View style={styles.autocompleteContainer}>
+          <Autocomplete
+            ref={itemNameInputRef}
+            autoCorrect={false}
+            autoFocus={true}
+            data={
+              filteredData?.length === 1 &&
+              filteredData[0].name === itemNameQuery.name
+                ? []
+                : filteredData
+            }
+            value={itemNameQuery.name}
+            onChangeText={setItemNameQuery}
+            mode="outlined"
+            label="Item Name"
+            placeholder="Name"
+            returnKeyType="next"
+            onSubmitEditing={() => {
+              itemQuantityInputRef.current.focus();
+            }}
+            blurOnSubmit={false}
+            renderTextInput={props => <TextInput {...props} />}
+            flatListProps={{
+              keyExtractor: (_, idx) => idx,
+              renderItem: ({item}) => (
+                <TouchableOpacity onPress={() => setItemNameQuery(item)}>
+                  <Text style={styles.itemText}>{item.name}</Text>
+                </TouchableOpacity>
+              ),
+            }}
+          />
+        </View>
+        <TextInput
+          ref={itemQuantityInputRef}
+          placeholder="0"
+          label="Quantity"
           mode="outlined"
-          label="Item Name"
-          placeholder="Name"
+          keyboardType="numeric"
+          daata={itemCount}
           returnKeyType="next"
-          onSubmitEditing={() => {
-            itemQuantityInputRef.current.focus();
-          }}
-          blurOnSubmit={false}
-          renderTextInput={props => <TextInput {...props} />}
-          flatListProps={{
-            keyExtractor: (_, idx) => idx,
-            renderItem: ({item}) => (
-              <TouchableOpacity onPress={() => setItemNameQuery(item)}>
-                <Text style={styles.itemText}>{item.name}</Text>
-              </TouchableOpacity>
-            ),
-          }}
+          onChangeText={text => setItemCount(text)}
         />
       </View>
-
-      <TextInput
-        ref={itemQuantityInputRef}
-        placeholder="0"
-        label="Quantity"
-        mode="outlined"
-        keyboardType="numeric"
-        daata={itemCount}
-        returnKeyType="next"
-        onChangeText={text => setItemCount(text)}
-      />
 
       <View style={styles.restContent}>
         <Button
@@ -183,23 +195,6 @@ function TableDetailsScreen({navigation, route}) {
           Reset
         </Button>
         {getTableData()}
-        <Button
-          mode="contained"
-          onPress={() => {
-            updateTableInDBFromState();
-          }}>
-          Update
-        </Button>
-        <Button
-          mode="contained"
-          onPress={() => {
-            closeTableInDB();
-          }}>
-          Close Table
-        </Button>
-        <Button mode="outlined" onPress={() => navigation.goBack()}>
-          Dismiss
-        </Button>
       </View>
       <Snackbar visible={showSnackBar}>{snackBarMsg}</Snackbar>
     </View>
@@ -209,13 +204,17 @@ const styles = StyleSheet.create({
   container: {
     position: 'relative',
     flex: 1,
-    // Android requiers padding to avoid overlapping
-    // with content and autocomplete
-    paddingTop: 50,
   },
   restContent: {
     marginTop: 8,
     zIndex: -1,
+  },
+  autocompleteHolder: {
+    position: 'relative',
+    width: '100%',
+    // Android requiers padding to avoid overlapping
+    // with content and autocomplete
+    paddingTop: 50,
   },
   autocompleteContainer: {
     flex: 1,
