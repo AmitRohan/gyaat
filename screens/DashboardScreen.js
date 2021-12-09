@@ -10,7 +10,7 @@ function DashboardScreen({navigation}) {
     const unsubscribe = navigation.addListener('focus', () => {
       TableStore.getItems()
         .then((_tables = []) => {
-          setTables(_tables.filter(table => table.active));
+          setTables(_tables.filter(table => !table.active));
         })
         .catch(_ => setTables([]));
     });
