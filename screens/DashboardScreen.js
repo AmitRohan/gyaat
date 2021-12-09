@@ -81,6 +81,20 @@ function DashboardScreen({navigation}) {
       },
       {money: 0, quantity: 0},
     );
+
+    var mostSellingItem = '';
+    var leastSellingItem = '';
+    var minQ = Math.min(...dataSet.map(_ => _.quantity));
+    var maxQ = Math.max(...dataSet.map(_ => _.quantity));
+    dataSet.forEach(data => {
+      if (data.quantity === maxQ) {
+        mostSellingItem += data.name + ' ';
+      }
+      if (data.quantity === minQ) {
+        leastSellingItem += data.name + ' ';
+      }
+    });
+
     return (
       <View style={styles.pieChartSectionContainer}>
         <View style={styles.titleContainer}>
@@ -122,6 +136,8 @@ function DashboardScreen({navigation}) {
         <View style={styles.descriptionContainer}>
           <Text>{overAllQuantity.quantity} items sold till date</Text>
           <Text>{overAllQuantity.money} earned till date</Text>
+          <Text>Most Sold Item : {mostSellingItem} </Text>
+          <Text>Least Sold Item : {leastSellingItem} </Text>
         </View>
       </View>
     );
