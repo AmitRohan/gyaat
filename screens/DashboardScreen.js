@@ -70,7 +70,14 @@ function DashboardScreen({navigation}) {
     tables.map(table => {
       allOrders = allOrders.concat(table.orders);
     });
-    const dataSet = allOrders
+    const filteredOrders = allOrders.filter(order => {
+      var orderTime = new Date(order.createdAt);
+      return (
+        orderTime.getTime() >= startDate.getTime() &&
+        orderTime.getTime() <= endDate.getTime()
+      );
+    });
+    const dataSet = filteredOrders
       .map(order => {
         return {
           name: order.item.name,
