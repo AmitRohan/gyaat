@@ -7,3 +7,6 @@
 5. [InAppPurchase](https://gilshaan.medium.com/react-native-subscriptions-in-app-purchases-service-fees-3b9daf7e7fc)
 5. [DatePicker](https://github.com/react-native-datetimepicker/datetimepicker)
 6. [Charts](https://www.npmjs.com/package/react-native-chart-kit)
+
+# Preview
+![Tables](/screenshots/v0.1/table_list.jpeg?raw=true "Table List") ![Dashboard](/screenshots/v0.1/dashboard.jpeg?raw=true "Analytics")
