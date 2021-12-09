@@ -51,7 +51,6 @@ function UsersScreen({navigation}) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#eeeeee',
     flex: 1,
   },
   list: {
