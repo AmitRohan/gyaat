@@ -146,7 +146,7 @@ function DashboardScreen({navigation}) {
             <DateTimePicker
               testID="startDatePicker"
               value={startDate}
-              maximumDate={today}
+              maximumDate={endDate}
               mode={'date'}
               is24Hour={true}
               display="default"
@@ -162,6 +162,7 @@ function DashboardScreen({navigation}) {
             <DateTimePicker
               testID="endDatePicker"
               value={endDate}
+              minimumDate={startDate}
               maximumDate={today}
               mode={'date'}
               is24Hour={true}
