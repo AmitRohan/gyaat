@@ -80,6 +80,7 @@ function NewTableModal({navigation}) {
                 id,
                 name: userNameQuery,
                 active: true,
+                createdAt: new Date().getTime(),
                 orders: [],
               }).finally(_ => navigation.goBack());
             };

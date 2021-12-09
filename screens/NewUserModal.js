@@ -54,11 +54,14 @@ function NewUserModal({navigation}) {
           var addUserToDB = (allUsers = []) => {
             console.log(allUsers, typeof allUsers);
             var id = 1 + (allUsers ? allUsers.pop() : {id: 0}).id;
-            UserStore.addItem({id, name: userName, number: userNumber}).finally(
-              _ => {
-                navigation.goBack();
-              },
-            );
+            UserStore.addItem({
+              id,
+              name: userName,
+              number: userNumber,
+              createdAt: new Date().getTime(),
+            }).finally(_ => {
+              navigation.goBack();
+            });
           };
           UserStore.getItems().then(addUserToDB).catch(addUserToDB);
         }}>
