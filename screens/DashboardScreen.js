@@ -42,7 +42,8 @@ function DashboardScreen({navigation}) {
       .map(order => {
         return {
           name: order.item.name,
-          quantity: order.quantity,
+          price: parseInt(order.item.price),
+          quantity: parseInt(order.quantity),
           color: '#ff0066',
         };
       })
@@ -52,7 +53,7 @@ function DashboardScreen({navigation}) {
         pv.forEach((v, pos) => {
           if (v.name === cv.name) {
             var modifiedEntry = Object.assign({}, v);
-            modifiedEntry.quantity = parseInt(modifiedEntry.quantity) + parseInt(cv.quantity);
+            modifiedEntry.quantity = modifiedEntry.quantity + cv.quantity;
             nV[pos] = modifiedEntry;
             isNew = false;
           }
@@ -62,15 +63,28 @@ function DashboardScreen({navigation}) {
         }
         return nV;
       }, [])
-      .map(({name, quantity}, pos) => {
+      .map(({name, quantity, price}, pos) => {
         return {
           name,
           quantity,
+          price,
           color: paletteAll[pos % paletteAll.length],
         };
       });
+
+    var overAllQuantity = dataSet.reduce(
+      (pv, cv) => {
+        return {
+          money: pv.money + cv.quantity * cv.price,
+          quantity: pv.quantity + cv.quantity,
+        };
+      },
+      {money: 0, quantity: 0},
+    );
     return (
       <View>
+        <Text>{overAllQuantity.quantity} items sold till date</Text>
+        <Text>{overAllQuantity.money} earned till date</Text>
         <Text>Item Distribution</Text>
         <PieChart
           data={dataSet}
