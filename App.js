@@ -14,7 +14,7 @@ import {
   DefaultTheme as NavigationDefaultTheme,
 } from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Image} from 'react-native';
+import {Appearance, Image} from 'react-native';
 import {
   Provider as PaperProvider,
   DarkTheme as PaperDarkTheme,
@@ -41,10 +41,15 @@ const tabBarInactiveTintColor = 'red';
 const CombinedDefaultTheme = merge(PaperDefaultTheme, NavigationDefaultTheme);
 const CombinedDarkTheme = merge(PaperDarkTheme, NavigationDarkTheme);
 
+const AppTheme =
+  Appearance.getColorScheme() === 'dark'
+    ? CombinedDarkTheme
+    : CombinedDefaultTheme;
+
 const App = () => {
   return (
-    <PaperProvider theme={CombinedDefaultTheme}>
-      <NavigationContainer theme={CombinedDefaultTheme}>
+    <PaperProvider theme={AppTheme}>
+      <NavigationContainer theme={AppTheme}>
         <Tab.Navigator
           screenOptions={({route}) => ({
             headerShown: route.name === 'Dashboard', // SHOW ONLY FOR DASHBOARD
