@@ -10,3 +10,6 @@
 
 # Preview
 ![Tables](/screenshots/v0.1/table_list.jpeg?raw=true "Table List") ![Dashboard](/screenshots/v0.1/dashboard.jpeg?raw=true "Analytics")
+
+<!-- for later use -->
+<!-- ![Alt text](/../<branch name>/path/to/image.png?raw=true "Optional Title") -->
