@@ -101,11 +101,26 @@ function DashboardScreen({navigation}) {
             />
           </View>
           <View style={styles.legendContainer}>
-            <Text>L1</Text>
+            {dataSet.map(data => {
+              return (
+                <Text key={data.name}>
+                  {' '}
+                  <View
+                    style={{
+                      backgroundColor: data.color,
+                      height: 10,
+                      width: 10,
+                      borderRadius: 10,
+                    }}
+                  />{' '}
+                  {data.name + ' (' + data.quantity + ')'}
+                </Text>
+              );
+            })}
           </View>
         </View>
         <View style={styles.descriptionContainer}>
-        <Text>{overAllQuantity.quantity} items sold till date</Text>
+          <Text>{overAllQuantity.quantity} items sold till date</Text>
           <Text>{overAllQuantity.money} earned till date</Text>
         </View>
       </View>
