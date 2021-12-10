@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Dimensions, Platform, StyleSheet, View} from 'react-native';
+import {Dimensions, Platform, ScrollView, StyleSheet, View} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {BarChart, PieChart} from 'react-native-chart-kit';
 import {Button, Text} from 'react-native-paper';
@@ -330,17 +330,16 @@ function DashboardScreen({navigation}) {
   };
 
   return (
-    <View>
+    <ScrollView style={styles.scrollContainer} stickyHeaderIndices={[0]}>
       {getFiltersUI()}
       {getItemDistributionUI()}
       {getDateDistributionUI()}
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#eeeeee',
     flex: 1,
   },
   filterContainer: {
