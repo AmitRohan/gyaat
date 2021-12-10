@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Dimensions, Platform, StyleSheet, View} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {PieChart} from 'react-native-chart-kit';
+import {BarChart, PieChart} from 'react-native-chart-kit';
 import {Button, Text} from 'react-native-paper';
 import {TableStore} from '../utils/TableStore';
 import {paletteAll} from '../utils/ColorPallete';
@@ -56,7 +56,23 @@ function DashboardScreen({navigation}) {
     setShowEndDate(true);
   };
 
-  const chartConfig = {
+  const barChartConfig = {
+    backgroundGradientFrom: '#fff',
+    backgroundGradientFromOpacity: 0,
+    backgroundGradientTo: '#fff',
+    backgroundGradientToOpacity: 0.5,
+
+    fillShadowGradient: '#ccc',
+    fillShadowGradientOpacity: 1,
+    color: (opacity = 1) => '#023047',
+    labelColor: (opacity = 1) => '#333',
+    strokeWidth: 2,
+
+    barPercentage: 0.5,
+    useShadowColorFromDataset: false,
+    decimalPlaces: 0,
+  };
+  const pieChartConfig = {
     backgroundGradientFrom: '#1E2923',
     backgroundGradientFromOpacity: 0,
     backgroundGradientTo: '#08130D',
@@ -180,7 +196,7 @@ function DashboardScreen({navigation}) {
               data={dataSet}
               width={windowWidth}
               height={220}
-              chartConfig={chartConfig}
+              chartConfig={pieChartConfig}
               accessor={'quantity'}
               backgroundColor={'transparent'}
               paddingLeft={'15'}
@@ -217,7 +233,104 @@ function DashboardScreen({navigation}) {
     );
   };
 
-  return <View>{getItemDistributionUI()}</View>;
+  const getDateDistributionUI = () => {
+    let allOrders = [];
+    tables.forEach(table => {
+      allOrders = allOrders.concat(table.orders);
+    });
+    const filteredOrders = allOrders.filter(order => {
+      var orderTime = new Date(order.createdAt);
+      return (
+        orderTime.getTime() >= startDate.getTime() &&
+        orderTime.getTime() <= endDate.getTime()
+      );
+    });
+    const barChartDataSet = filteredOrders
+      .map(order => {
+        return {
+          quantity: parseInt(order.quantity),
+          createdAt: new Date(new Date(order.createdAt).setHours(12, 0, 0, 0)),
+          color: '#ff0066',
+        };
+      })
+      .reduce((pv, cv) => {
+        var nV = Object.assign([], pv);
+        var isNew = true;
+        pv.forEach((v, pos) => {
+          if (v.createdAt.getTime() === cv.createdAt.getTime()) {
+            var modifiedEntry = Object.assign({}, v);
+            modifiedEntry.quantity = modifiedEntry.quantity + cv.quantity;
+            nV[pos] = modifiedEntry;
+            isNew = false;
+          }
+        });
+        if (isNew) {
+          nV.push(cv);
+        }
+        return nV;
+      }, [])
+      .map(({quantity, createdAt}, pos) => {
+        return {
+          quantity,
+          createdAt,
+        };
+      });
+
+    var mostSellingItem = '';
+    var leastSellingItem = '';
+    var minQ = Math.min(...barChartDataSet.map(_ => _.quantity));
+    var maxQ = Math.max(...barChartDataSet.map(_ => _.quantity));
+    barChartDataSet.forEach(data => {
+      if (data.data === maxQ) {
+        mostSellingItem += data.createdAt.toDateString() + ' ';
+      }
+      if (data.data === minQ) {
+        leastSellingItem += data.createdAt.toDateString() + ' ';
+      }
+    });
+
+    var chartData = {
+      labels: barChartDataSet.map(data => '' + data.createdAt.toDateString()),
+      datasets: [
+        {
+          data: barChartDataSet.map(data => data.quantity),
+        },
+      ],
+    };
+
+    return (
+      <View style={styles.pieChartSectionContainer}>
+        <View style={styles.titleContainer}>
+          <Text>Day wise Distribution</Text>
+        </View>
+        <View style={styles.bodyContainer}>
+          <View style={styles.chartContainer}>
+            <BarChart
+              data={chartData}
+              width={windowWidth}
+              height={220}
+              chartConfig={barChartConfig}
+              backgroundColor={'transparent'}
+              paddingLeft={'15'}
+              hasLegend={false}
+              absolute
+            />
+          </View>
+        </View>
+        <View style={styles.descriptionContainer}>
+          <Text>Most Sold Date : {mostSellingItem} </Text>
+          <Text>Least Sold Date : {leastSellingItem} </Text>
+        </View>
+      </View>
+    );
+  };
+
+  return (
+    <View>
+      {getItemDistributionUI()}
+      {getDateDistributionUI()}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
