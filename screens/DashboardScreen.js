@@ -81,6 +81,45 @@ function DashboardScreen({navigation}) {
     strokeWidth: 2,
     useShadowColorFromDataset: false,
   };
+  const getFiltersUI = () => {
+    return (
+      <View>
+        <View>
+          <Button onPress={openStartDatepicker}>
+            Start date : {startDate.toDateString()}
+          </Button>
+        </View>
+        {showStartDate && (
+          <DateTimePicker
+            testID="startDatePicker"
+            value={startDate}
+            maximumDate={endDate}
+            mode={'date'}
+            is24Hour={true}
+            display="default"
+            onChange={onStartDateChange}
+          />
+        )}
+        <View>
+          <Button onPress={openEndDatepicker}>
+            End date : {endDate.toDateString()}
+          </Button>
+        </View>
+        {showEndDate && (
+          <DateTimePicker
+            testID="endDatePicker"
+            value={endDate}
+            minimumDate={startDate}
+            maximumDate={today}
+            mode={'date'}
+            is24Hour={true}
+            display="default"
+            onChange={onEndDateChange}
+          />
+        )}
+      </View>
+    );
+  };
   const getItemDistributionUI = () => {
     let allOrders = [];
     tables.map(table => {
@@ -152,41 +191,6 @@ function DashboardScreen({navigation}) {
 
     return (
       <View style={styles.pieChartSectionContainer}>
-        <View>
-          <View>
-            <Button onPress={openStartDatepicker}>
-              Start date : {startDate.toDateString()}
-            </Button>
-          </View>
-          {showStartDate && (
-            <DateTimePicker
-              testID="startDatePicker"
-              value={startDate}
-              maximumDate={endDate}
-              mode={'date'}
-              is24Hour={true}
-              display="default"
-              onChange={onStartDateChange}
-            />
-          )}
-          <View>
-            <Button onPress={openEndDatepicker}>
-              End date : {endDate.toDateString()}
-            </Button>
-          </View>
-          {showEndDate && (
-            <DateTimePicker
-              testID="endDatePicker"
-              value={endDate}
-              minimumDate={startDate}
-              maximumDate={today}
-              mode={'date'}
-              is24Hour={true}
-              display="default"
-              onChange={onEndDateChange}
-            />
-          )}
-        </View>
         <View style={styles.titleContainer}>
           <Text>Item Distribution</Text>
         </View>
@@ -327,6 +331,7 @@ function DashboardScreen({navigation}) {
 
   return (
     <View>
+      {getFiltersUI()}
       {getItemDistributionUI()}
       {getDateDistributionUI()}
     </View>
