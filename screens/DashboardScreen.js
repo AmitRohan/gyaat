@@ -83,9 +83,9 @@ function DashboardScreen({navigation}) {
   };
   const getFiltersUI = () => {
     return (
-      <View>
-        <View>
-          <Button onPress={openStartDatepicker}>
+      <View style={styles.filterContainer}>
+        <View style={styles.filterButton}>
+          <Button onPress={openStartDatepicker} mode="contained">
             Start date : {startDate.toDateString()}
           </Button>
         </View>
@@ -100,8 +100,8 @@ function DashboardScreen({navigation}) {
             onChange={onStartDateChange}
           />
         )}
-        <View>
-          <Button onPress={openEndDatepicker}>
+        <View style={styles.filterButton}>
+          <Button onPress={openEndDatepicker} mode="contained">
             End date : {endDate.toDateString()}
           </Button>
         </View>
@@ -342,6 +342,13 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#eeeeee',
     flex: 1,
+  },
+  filterContainer: {
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
+  filterButton: {
+    paddingTop: 10,
   },
   pieChartSectionContainer: {
     marginTop: 10,
